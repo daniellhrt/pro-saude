@@ -14,8 +14,12 @@ import java.util.Optional;
 @RequestMapping("/api/paciente")
 public class PacienteController {
 
+    private final PacienteRepository pacienteRepository;
+
     @Autowired
-    private PacienteRepository pacienteRepository;
+    public PacienteController(PacienteRepository pacienteRepository) {
+        this.pacienteRepository = pacienteRepository;
+    }
 
     @GetMapping
     public List<Paciente> getAllPacientes() {
@@ -35,17 +39,22 @@ public class PacienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Paciente> updatePaciente(@PathVariable(value = "id")
-                                                   Long pacienteId, @RequestBody Paciente pacienteDetails) {
+    public ResponseEntity<Paciente> updatePaciente(
+            @PathVariable(value = "id") Long pacienteId,
+            @RequestBody Paciente pacienteDetails) {
+
         Optional<Paciente> paciente = pacienteRepository.findById(pacienteId);
         if (paciente.isPresent()) {
             Paciente pacienteUpdate = paciente.get();
             pacienteUpdate.setNome(pacienteDetails.getNome());
+            pacienteUpdate.setCpf(pacienteDetails.getCpf());
+            pacienteUpdate.setEmail(pacienteDetails.getEmail());
             pacienteRepository.save(pacienteUpdate);
             return ResponseEntity.ok(pacienteUpdate);
         } else {
             return ResponseEntity.notFound().build();
         }
+
     }
 
     @DeleteMapping("/{id}")
