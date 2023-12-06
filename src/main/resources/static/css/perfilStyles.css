@@ -1,0 +1,96 @@
+/* perfilstyles.css */
+
+body, html {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #2c3e50, #1c2833);
+    color: #ecf0f1;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Alterado para centralizar os elementos */
+}
+
+header {
+    background-color: #34495e;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+h1 {
+    color: #3498db;
+    margin: 0;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinhado à esquerda */
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Estilos para o contêiner de input e botão */
+#updateFormContainer {
+    width: 50%; /* Ajustar a largura conforme necessário */
+}
+
+/* Estilos para as caixas de input */
+input {
+    padding: 10px;
+    margin: 5px 0; /* Diminuir a margem para metade */
+    width: 100%; /* Utilizar a largura total do contêiner */
+    box-sizing: border-box;
+    border: 1px solid #3498db;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f2f2f2; /* Adicionar fundo cinza claro */
+}
+
+/* Estilos para os botões */
+button {
+    background-color: #3498db;
+    color: #ecf0f1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2c3e50;
+}
+
+/* Estilos para os dados do paciente */
+#patientDataSection {
+    width: 50%; /* Ajustar a largura conforme necessário */
+}
+
+#patientData {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#patientData li {
+    margin-bottom: 10px;
+}
+
+/* Ajustar o layout para dispositivos móveis */
+@media (max-width: 767px) {
+    main {
+        align-items: center;
+    }
+
+    #patientDataSection,
+    #updateFormContainer {
+        width: 100%; /* Utilizar a largura total em dispositivos móveis */
+    }
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Serviços</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+
+<header>
+    <h1>Serviços</h1>
+</header>
+
+<section id="servicos"></section>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/api/servico'
+        }).then(function (data) {
+            let servicos = '';
+
+            $.each(data, function (key, value) {
+                value.tipo = value.tipo.replace(/_/g, ' ')
+                servicos += `<div class="servico" data-id="${value.id}">
+                                <p><strong>Tipo:</strong> ${value.tipo}</p>
+                                <p><strong>Tempo de Duração:</strong> ${value.tempoDuracao}</p>
+                                <p><strong>Valor:</strong> ${value.valor}</p>
+                                <div class="profissionais">
+                                    <strong>Profissionais:</strong>
+                                    <ul>`;
+
+                // Itera sobre os profissionais associados ao serviço
+                $.each(value.profissionais, function (index, profissional) {
+                    servicos += `<li>
+                                    <p><strong>Nome:</strong> ${profissional.nome}</p>
+                                    <p><strong>Email:</strong> ${profissional.email}</p>
+                                    <p><strong>CPF:</strong> ${profissional.cpf}</p>
+                                    <p><strong>Especialidade:</strong> ${profissional.especialidade}</p>
+                                </li>`;
+                });
+
+                servicos += `</ul></div></div>`;
+            });
+
+            $('#servicos').html(servicos);
+        });
+    });
+</script>
+
+</body>
+</html>

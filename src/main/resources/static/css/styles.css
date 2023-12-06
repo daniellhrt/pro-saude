@@ -1,0 +1,79 @@
+body, html {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Altura mínima igual à altura da viewport */
+    background: linear-gradient(to bottom, #2c3e50, #1c2833); /* Gradiente azul escuro */
+    color: #ecf0f1; /* Cor do texto em um tom claro */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    background-color: #34495e; /* Azul escuro para o cabeçalho */
+    padding: 20px;
+}
+
+h1 {
+    color: #3498db; /* Azul mais intenso para o título */
+    margin: 0; /* Removi a margem superior do h1 para uma aparência mais limpa */
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+p {
+    margin: 10px 0;
+}
+
+.servico {
+    background-color: #2c3e50; /* Azul escuro para os itens */
+    border: 1px solid #3498db; /* Cor da borda combinando com o azul do título */
+    padding: 15px;
+    margin: 10px 0;
+    width: 80%;
+    box-sizing: border-box;
+}
+
+.profissionais {
+    margin-top: 20px; /* Espaçamento adicional antes do bloco de profissionais */
+}
+
+.profissionais ul {
+    list-style: none;
+    padding: 0;
+}
+
+.profissionais li {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #3498db; /* Adiciona uma borda inferior para separar visualmente os profissionais */
+    padding-bottom: 10px; /* Adiciona um espaço na parte inferior de cada profissional */
+}
+
+.profissional {
+    background-color: #3498db; /* Cor de fundo para profissionais */
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+/* Estilos específicos para telas menores (celulares) */
+@media (max-width: 767px) {
+    .servico {
+        background: linear-gradient(to bottom, #2c3e50, #1c2833); /* Gradiente azul escuro apenas para a tabela de serviços em telas maiores */
+    }
+
+    .profissionais {
+        margin-top: 10px; /* Espaçamento padrão antes do bloco de profissionais em telas menores */
+    }
+
+    .profissionais li {
+        border-bottom: none; /* Remover a borda inferior para evitar a separação */
+    }
+}
