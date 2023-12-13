@@ -1,73 +1,59 @@
 package br.com.daniel.prosaude.prosaude.controller;
 
-import br.com.daniel.prosaude.prosaude.model.Profissional;
-import br.com.daniel.prosaude.prosaude.repository.ProfissionalRepository;
+import br.com.daniel.prosaude.prosaude.model.Profissional.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("/api/profissional")
+@RequestMapping("/api/profissionais")
 public class ProfissionalController {
 
-    private final ProfissionalRepository profissionalRepository;
-
     @Autowired
-    public ProfissionalController(ProfissionalRepository profissionalRepository) {
-        this.profissionalRepository = profissionalRepository;
+    private ProfissionalRepository repository;
+
+    @PostMapping
+    @Transactional
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroProfissional dados,
+                                    UriComponentsBuilder uriBuilder) {
+        var profissional = new Profissional(dados);
+        repository.save(profissional);
+        var uri = uriBuilder.path("/profissional/{id}").buildAndExpand(profissional.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DadosAtualizadoDetalhadoProfissional(profissional));
     }
 
     @GetMapping
-    public List<Profissional> getAllProfissionais() {
-        return profissionalRepository.findAll();
+    public ResponseEntity<Page<DadosListagemProfissional>> listar(@PageableDefault(size = 10, sort = {"nome"})
+                                                                  Pageable paginacao) {
+        var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemProfissional::new);
+        return ResponseEntity.ok(page);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Profissional> getProfissionalById(@PathVariable(value = "id") Long profissionalId) {
-        Optional<Profissional> profissional = profissionalRepository.findById(profissionalId);
-        return profissional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @PutMapping
+    @Transactional
+    public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizacaoProfissional dados) {
+        var profissional = repository.getReferenceById(dados.id());
+        profissional.atualizarInformacoes(dados);
+        return ResponseEntity.ok(new DadosAtualizadoDetalhadoProfissional(profissional));
     }
 
-    @PostMapping
-    public ResponseEntity<Profissional> createProfissional(@RequestBody Profissional profissional) {
-        Profissional newProfissional = profissionalRepository.save(profissional);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newProfissional);
+    @DeleteMapping("{id}")
+    @Transactional
+    public ResponseEntity remover(@PathVariable Long id) {
+        var medico = repository.getReferenceById(id);
+        medico.inativar();
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Profissional> updateProfissional(
-            @PathVariable(value = "id") Long profissionalId,
-            @RequestBody Profissional profissionalDetails) {
-
-        Optional<Profissional> profissional = profissionalRepository.findById(profissionalId);
-        if (profissional.isPresent()) {
-            Profissional profissionalUpdate = profissional.get();
-            profissionalUpdate.setNome(profissionalDetails.getNome());
-            profissionalUpdate.setCpf(profissionalDetails.getCpf());
-            profissionalUpdate.setEmail(profissionalDetails.getEmail());
-            profissionalUpdate.setEspecialidade(profissionalDetails.getEspecialidade());
-            profissionalRepository.save(profissionalUpdate);
-            return ResponseEntity.ok(profissionalUpdate);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-
+    @GetMapping("{id}")
+    public ResponseEntity detalhar(@PathVariable Long id) {
+        var medico = repository.getReferenceById(id);
+        return ResponseEntity.ok(new DadosAtualizadoDetalhadoProfissional(medico));
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProfissional(@PathVariable(value = "id") Long profissionalId) {
-        Optional<Profissional> profissional = profissionalRepository.findById(profissionalId);
-        if (profissional.isPresent()) {
-            profissionalRepository.delete(profissional.get());
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-
 }

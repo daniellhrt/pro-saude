@@ -1,6 +1,5 @@
-package br.com.daniel.prosaude.prosaude.repository;
+package br.com.daniel.prosaude.prosaude.model.servico;
 
-import br.com.daniel.prosaude.prosaude.model.Servico;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ServicoRepository extends JpaRepository<Servico, Long> {
