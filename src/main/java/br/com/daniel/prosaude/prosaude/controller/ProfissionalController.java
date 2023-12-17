@@ -15,8 +15,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/api/profissionais")
 public class ProfissionalController {
 
+    private final ProfissionalRepository repository;
+
     @Autowired
-    private ProfissionalRepository repository;
+    public ProfissionalController(ProfissionalRepository repository) {
+        this.repository = repository;
+    }
 
     @PostMapping
     @Transactional
@@ -24,7 +28,7 @@ public class ProfissionalController {
                                     UriComponentsBuilder uriBuilder) {
         var profissional = new Profissional(dados);
         repository.save(profissional);
-        var uri = uriBuilder.path("/profissional/{id}").buildAndExpand(profissional.getId()).toUri();
+        var uri = uriBuilder.path("/profissionais/{id}").buildAndExpand(profissional.getId()).toUri();
         return ResponseEntity.created(uri).body(new DadosAtualizadoDetalhadoProfissional(profissional));
     }
 
