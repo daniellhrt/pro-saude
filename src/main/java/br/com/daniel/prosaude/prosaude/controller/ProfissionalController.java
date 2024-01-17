@@ -33,8 +33,9 @@ public class ProfissionalController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemProfissional>> listar(@PageableDefault(size = 10, sort = {"nome"})
-                                                                  Pageable paginacao) {
+    public ResponseEntity<Page<DadosListagemProfissional>> listar(@PageableDefault(
+            size = 10, sort = {"nome"}) Pageable paginacao) {
+
         var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemProfissional::new);
         return ResponseEntity.ok(page);
     }
